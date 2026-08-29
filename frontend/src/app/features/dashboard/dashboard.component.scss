@@ -1,0 +1,46 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f4f5f7;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+
+  h1 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #444;
+
+  button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #d0d3d9;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+  }
+}
+
+main {
+  padding: 2rem;
+
+  pre {
+    background: #111827;
+    color: #d1fae5;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+}

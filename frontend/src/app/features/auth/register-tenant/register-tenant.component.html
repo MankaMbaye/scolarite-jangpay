@@ -1,0 +1,43 @@
+<div class="auth-page">
+  <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Créer votre établissement</h1>
+    <p class="subtitle">Démarrez votre espace de gestion scolaire</p>
+
+    <label>
+      Nom de l'établissement
+      <input type="text" formControlName="tenantName" placeholder="Lycée Victor Hugo" />
+    </label>
+
+    <label>
+      Code établissement
+      <input type="text" formControlName="tenantCode" placeholder="lycee-victor-hugo" />
+    </label>
+
+    <label>
+      Votre nom complet
+      <input type="text" formControlName="adminFullName" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="adminEmail" />
+    </label>
+
+    <label>
+      Mot de passe
+      <input type="password" formControlName="adminPassword" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Création...' : 'Créer mon espace' }}
+    </button>
+
+    <p class="switch">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </form>
+</div>

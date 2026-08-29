@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: scolarite
+      POSTGRES_USER: scolarite
+      POSTGRES_PASSWORD: scolarite
+    ports:
+      - "5432:5432"
+    volumes:
+      - scolarite-db-data:/var/lib/postgresql/data
+
+volumes:
+  scolarite-db-data:

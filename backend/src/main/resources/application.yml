@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: scolarite-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scolarite
+    username: scolarite
+    password: scolarite
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret-change-me}
+    expiration-ms: 86400000

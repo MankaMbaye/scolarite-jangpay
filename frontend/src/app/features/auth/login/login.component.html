@@ -1,0 +1,33 @@
+<div class="auth-page">
+  <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Connexion</h1>
+    <p class="subtitle">Accédez à l'espace de votre établissement</p>
+
+    <label>
+      Code établissement
+      <input type="text" formControlName="tenantCode" placeholder="ex: lycee-victor-hugo" />
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" placeholder="vous@ecole.fr" />
+    </label>
+
+    <label>
+      Mot de passe
+      <input type="password" formControlName="password" />
+    </label>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Connexion...' : 'Se connecter' }}
+    </button>
+
+    <p class="switch">
+      Nouvel établissement ? <a routerLink="/register">Créer un compte</a>
+    </p>
+  </form>
+</div>

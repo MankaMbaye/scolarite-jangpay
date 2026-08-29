@@ -1,0 +1,20 @@
+<div class="dashboard">
+  <header>
+    <h1>Scolarité</h1>
+    <div class="user">
+      <span>{{ authService.currentUser()?.fullName }} · {{ authService.currentUser()?.role }}</span>
+      <button (click)="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <main>
+    <h2>Bienvenue 👋</h2>
+    <p>Ce squelette confirme que l'authentification et le scoping multi-tenant fonctionnent de bout en bout.</p>
+
+    @if (ping()) {
+      <pre>{{ ping() | json }}</pre>
+    } @else {
+      <p>Chargement du statut de l'API...</p>
+    }
+  </main>
+</div>
