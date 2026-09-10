@@ -1,0 +1,62 @@
+.recap {
+  margin: 20px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.recap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.recap-row:last-child {
+  border-bottom: none;
+}
+.recap-row dt {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.recap-row dd {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+}
+.recap-row.total {
+  background: var(--brand-tint);
+}
+.recap-row.total dt,
+.recap-row.total dd {
+  color: var(--brand-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.confirm-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+.confirm-check.has-error {
+  border-color: var(--critical);
+}
+.confirm-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: var(--brand);
+  flex: none;
+}

@@ -3,18 +3,52 @@
     <h1>Scolarité</h1>
     <div class="user">
       <span>{{ authService.currentUser()?.fullName }} · {{ authService.currentUser()?.role }}</span>
-      <button (click)="logout()">Déconnexion</button>
+      <button class="btn btn-secondary btn-sm" (click)="logout()">Déconnexion</button>
     </div>
   </header>
 
   <main>
-    <h2>Bienvenue 👋</h2>
-    <p>Ce squelette confirme que l'authentification et le scoping multi-tenant fonctionnent de bout en bout.</p>
+    <div class="welcome">
+      <div>
+        <h2>Bienvenue, {{ authService.currentUser()?.fullName }}</h2>
+        <p class="subtitle">Accédez aux espaces JangPay disponibles pour votre établissement.</p>
+      </div>
+      @if (ping()) {
+        <span class="status success api-status">
+          <span class="dot" aria-hidden="true"></span>
+          API connectée
+        </span>
+      }
+    </div>
 
-    @if (ping()) {
-      <pre>{{ ping() | json }}</pre>
-    } @else {
-      <p>Chargement du statut de l'API...</p>
-    }
+    <div class="jangpay-links">
+      <a routerLink="/jangpay/payer" class="link-card">
+        <span class="link-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 8.5h15" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 12.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <span class="link-body">
+          <span class="link-title">Payer des frais scolaires</span>
+          <span class="link-desc">Aperçu du parcours de paiement parent (JangPay)</span>
+        </span>
+      </a>
+      <a routerLink="/jangpay/frais" class="link-card">
+        <span class="link-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 2.5h7l3.5 3.5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 10h5M6.5 13h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <span class="link-body">
+          <span class="link-title">Gestion des frais</span>
+          <span class="link-desc">Créer et administrer les frais scolaires (Comptable)</span>
+        </span>
+      </a>
+      <a routerLink="/jangpay/transactions" class="link-card">
+        <span class="link-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2.5 6.5h11M9 3.5l4.5 3-4.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 13.5h-11M11 10.5l-4.5 3 4.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="link-body">
+          <span class="link-title">Transactions</span>
+          <span class="link-desc">Historique des paiements de l'établissement (Comptable)</span>
+        </span>
+      </a>
+    </div>
   </main>
 </div>

@@ -1,28 +1,33 @@
 <div class="auth-page">
   <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="auth-brand">
+      <span class="auth-logo">J</span>
+      <span class="auth-brand-name">JangERP</span>
+    </div>
+
     <h1>Connexion</h1>
     <p class="subtitle">Accédez à l'espace de votre établissement</p>
 
-    <label>
-      Code établissement
-      <input type="text" formControlName="tenantCode" placeholder="ex: lycee-victor-hugo" />
-    </label>
+    <div class="field">
+      <label for="tenantCode">Code établissement</label>
+      <input id="tenantCode" type="text" formControlName="tenantCode" placeholder="ex: lycee-victor-hugo" />
+    </div>
 
-    <label>
-      Email
-      <input type="email" formControlName="email" placeholder="vous@ecole.fr" />
-    </label>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="vous@ecole.fr" />
+    </div>
 
-    <label>
-      Mot de passe
-      <input type="password" formControlName="password" />
-    </label>
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password" />
+    </div>
 
     @if (errorMessage()) {
-      <p class="error">{{ errorMessage() }}</p>
+      <p class="error" role="alert">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="loading()">
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="loading()">
       {{ loading() ? 'Connexion...' : 'Se connecter' }}
     </button>
 

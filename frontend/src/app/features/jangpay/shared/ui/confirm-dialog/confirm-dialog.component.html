@@ -1,0 +1,27 @@
+<div class="backdrop" (click)="cancel.emit()">
+  <div
+    class="panel"
+    [class.danger]="data().tone === 'danger'"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="confirm-title"
+    aria-describedby="confirm-message"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="icon" [class.danger]="data().tone === 'danger'">
+      @if (data().tone === 'danger') {
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l10 18H2L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="17" r="0.9" fill="currentColor"/></svg>
+      } @else {
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.2" r="0.9" fill="currentColor"/></svg>
+      }
+    </div>
+    <h2 id="confirm-title">{{ data().title }}</h2>
+    <p id="confirm-message">{{ data().message }}</p>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel.emit()">Annuler</button>
+      <button type="button" class="btn" [class.btn-danger]="data().tone === 'danger'" [class.btn-primary]="data().tone !== 'danger'" (click)="confirm.emit()">
+        {{ data().confirmLabel }}
+      </button>
+    </div>
+  </div>
+</div>

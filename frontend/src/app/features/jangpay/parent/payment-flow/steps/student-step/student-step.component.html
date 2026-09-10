@@ -1,0 +1,72 @@
+<fieldset>
+  <legend>
+    <h2 class="step-title">Informations de l'élève</h2>
+    @if (flow.isStaff()) {
+      <p class="step-hint">Recherchez l'élève par niveau puis par classe pour effectuer son paiement.</p>
+    } @else {
+      <p class="step-hint">Sélectionnez l'enfant pour lequel vous souhaitez régler des frais.</p>
+    }
+  </legend>
+
+  @if (flow.isStaff()) {
+    <div class="staff-search">
+      <div class="field">
+        <label for="niveau-filter">Niveau</label>
+        <select id="niveau-filter" [value]="flow.niveauFilter()" (change)="onNiveauChange($event)">
+          <option value="ALL">Sélectionner un niveau</option>
+          @for (niveau of flow.availableNiveaux; track niveau) {
+            <option [value]="niveau">{{ niveau }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="classe-filter">Classe</label>
+        <select id="classe-filter" [value]="flow.classeFilter()" [disabled]="flow.niveauFilter() === 'ALL'" (change)="onClasseChange($event)">
+          <option value="ALL">Sélectionner une classe</option>
+          @for (classe of flow.availableClasses(); track classe) {
+            <option [value]="classe">{{ classe }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  }
+
+  @let visibleStudents = flow.isStaff() ? flow.filteredStudents() : flow.students();
+
+  @if (flow.isStaff() && flow.classeFilter() === 'ALL') {
+    <p class="search-hint">Choisissez un niveau puis une classe pour afficher ses élèves.</p>
+  } @else if (visibleStudents.length === 0) {
+    <p class="search-hint">Aucun élève {{ flow.isStaff() ? 'dans cette classe' : 'disponible' }}.</p>
+  } @else {
+    <div class="student-list" role="radiogroup" aria-label="Enfant" aria-required="true">
+      @for (student of visibleStudents; track student.id) {
+        <button
+          type="button"
+          class="student-card"
+          role="radio"
+          [attr.aria-checked]="flow.selectedStudentId() === student.id"
+          [class.selected]="flow.selectedStudentId() === student.id"
+          (click)="select(student.id)"
+        >
+          <span class="avatar">{{ student.initials }}</span>
+          <span class="info">
+            <span class="name">{{ student.fullName }}</span>
+            <span class="meta">Matricule {{ student.matricule }} · {{ student.classLevel }} · Année {{ student.academicYear }}</span>
+          </span>
+          <span class="check" [class.checked]="flow.selectedStudentId() === student.id" aria-hidden="true">
+            @if (flow.selectedStudentId() === student.id) {
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            }
+          </span>
+        </button>
+      }
+    </div>
+  }
+
+  @if (flow.attemptedAdvance() && !flow.selectedStudentId()) {
+    <p class="field-error" role="alert">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 6l4 4M10 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Sélectionnez un enfant pour continuer.
+    </p>
+  }
+</fieldset>

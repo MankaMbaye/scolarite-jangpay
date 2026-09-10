@@ -1,0 +1,183 @@
+<app-modal [title]="titleText()" size="lg" (close)="close.emit()">
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" class="tab" [class.active]="activeTab() === 'general'" (click)="selectTab('general')">
+      Général
+      @if (attemptedSave() && generalHasError()) {
+        <span class="tab-dot" aria-hidden="true"></span>
+      }
+    </button>
+    <button type="button" role="tab" class="tab" [class.active]="activeTab() === 'amount'" (click)="selectTab('amount')">
+      Montant &amp; période
+      @if (attemptedSave() && amountHasError()) {
+        <span class="tab-dot" aria-hidden="true"></span>
+      }
+    </button>
+    <button type="button" role="tab" class="tab" [class.active]="activeTab() === 'settings'" (click)="selectTab('settings')">
+      Paramètres
+    </button>
+  </div>
+
+  <form (submit)="$event.preventDefault()">
+    @if (activeTab() === 'general') {
+      <div class="tab-panel">
+        <div class="field" [class.has-error]="attemptedSave() && errors().name">
+          <label for="fee-name">Nom du frais <span class="required-mark">*</span></label>
+          <input
+            id="fee-name"
+            type="text"
+            placeholder="Ex. Scolarité CM2"
+            [value]="value().name"
+            [disabled]="readonly()"
+            (input)="patch('name', $any($event.target).value)"
+          />
+          @if (attemptedSave() && errors().name) {
+            <p class="field-error">{{ errors().name }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="fee-type">Type de frais <span class="required-mark">*</span></label>
+          <select id="fee-type" [disabled]="readonly()" (change)="patch('category', $any($event.target).value)">
+            @for (cat of categories; track cat[0]) {
+              <option [value]="cat[0]" [selected]="cat[0] === value().category">{{ cat[1] }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="fee-description">Description</label>
+          <textarea
+            id="fee-description"
+            rows="3"
+            placeholder="Précisions visibles par les parents (facultatif)"
+            [value]="value().description"
+            [disabled]="readonly()"
+            (input)="patch('description', $any($event.target).value)"
+          ></textarea>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'amount') {
+      <div class="tab-panel">
+        <div class="field-row">
+          <div class="field" [class.has-error]="attemptedSave() && errors().amount">
+            <label for="fee-amount">Montant (XOF) <span class="required-mark">*</span></label>
+            <input
+              id="fee-amount"
+              type="number"
+              min="1"
+              step="500"
+              placeholder="Ex. 120000"
+              [value]="value().amount ?? ''"
+              [disabled]="readonly()"
+              (input)="onAmountInput($any($event.target).value)"
+            />
+            @if (attemptedSave() && errors().amount) {
+              <p class="field-error">{{ errors().amount }}</p>
+            }
+          </div>
+
+          <div class="field" [class.has-error]="attemptedSave() && errors().academicYear">
+            <label for="fee-year">Année scolaire <span class="required-mark">*</span></label>
+            <input
+              id="fee-year"
+              type="text"
+              placeholder="2026-2027"
+              [value]="value().academicYear"
+              [disabled]="readonly()"
+              (input)="patch('academicYear', $any($event.target).value)"
+            />
+            @if (attemptedSave() && errors().academicYear) {
+              <p class="field-error">{{ errors().academicYear }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" [class.has-error]="attemptedSave() && errors().startDate">
+            <label for="fee-start">Date de début <span class="required-mark">*</span></label>
+            <input
+              id="fee-start"
+              type="date"
+              [value]="value().startDate"
+              [disabled]="readonly()"
+              (input)="patch('startDate', $any($event.target).value)"
+            />
+            @if (attemptedSave() && errors().startDate) {
+              <p class="field-error">{{ errors().startDate }}</p>
+            }
+          </div>
+
+          <div class="field" [class.has-error]="attemptedSave() && errors().dueDate">
+            <label for="fee-due">Date d'échéance <span class="required-mark">*</span></label>
+            <input
+              id="fee-due"
+              type="date"
+              [value]="value().dueDate"
+              [disabled]="readonly()"
+              (input)="patch('dueDate', $any($event.target).value)"
+            />
+            @if (attemptedSave() && errors().dueDate) {
+              <p class="field-error">{{ errors().dueDate }}</p>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (activeTab() === 'settings') {
+      <div class="tab-panel">
+        <div class="field">
+          <label for="fee-class">Classe concernée</label>
+          <select id="fee-class" [disabled]="readonly()" (change)="patch('classLevel', $any($event.target).value)">
+            @for (cls of classOptions; track cls) {
+              <option [value]="cls" [selected]="cls === value().classLevel">{{ cls }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="fee-status">Statut</label>
+          <select id="fee-status" [disabled]="readonly()" (change)="patch('status', $any($event.target).value)">
+            <option value="ACTIVE" [selected]="value().status === 'ACTIVE'">Actif</option>
+            <option value="INACTIVE" [selected]="value().status === 'INACTIVE'">Inactif</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Paiement</label>
+          <div class="segmented" role="radiogroup" aria-label="Paiement obligatoire ou facultatif">
+            <button
+              type="button"
+              class="segment"
+              [class.active]="value().mandatory"
+              [disabled]="readonly()"
+              (click)="patch('mandatory', true)"
+            >
+              Obligatoire
+            </button>
+            <button
+              type="button"
+              class="segment"
+              [class.active]="!value().mandatory"
+              [disabled]="readonly()"
+              (click)="patch('mandatory', false)"
+            >
+              Facultatif
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </form>
+
+  <footer class="form-footer">
+    @if (readonly()) {
+      <button type="button" class="btn btn-primary" (click)="close.emit()">Fermer</button>
+    } @else {
+      <button type="button" class="btn btn-secondary" (click)="close.emit()">Annuler</button>
+      <button type="button" class="btn btn-primary" (click)="submit()">Enregistrer</button>
+    }
+  </footer>
+</app-modal>

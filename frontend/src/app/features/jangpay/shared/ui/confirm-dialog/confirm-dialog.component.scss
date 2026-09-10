@@ -1,0 +1,57 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 25, 43, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 110;
+}
+
+.panel {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  box-shadow: 0 12px 40px rgba(16, 25, 43, 0.25);
+  padding: 24px;
+  text-align: center;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 14px;
+  border-radius: 999px;
+  background: var(--warning-tint);
+  color: var(--warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon.danger {
+  background: var(--critical-tint);
+  color: var(--critical);
+}
+
+.panel h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.panel p {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.actions .btn {
+  flex: 1;
+}

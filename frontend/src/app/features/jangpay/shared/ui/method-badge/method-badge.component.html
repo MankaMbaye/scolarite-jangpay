@@ -1,0 +1,10 @@
+<span class="method-badge">
+  @if (method().logo) {
+    <img class="method-logo" [src]="method().logo" [alt]="method().label" />
+  } @else {
+    <span class="method-dot" [style.background]="method().accent" aria-hidden="true"></span>
+  }
+  @if (showLabel()) {
+    <span class="method-label">{{ method().label }}</span>
+  }
+</span>

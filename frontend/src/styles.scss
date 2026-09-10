@@ -1,1 +1,234 @@
-/* You can add global styles to this file, and also import other style files */
+/* Design tokens shared across JangERP — established from the JangPay dashboard mockups. */
+:root {
+  --brand: #2f5fe0;
+  --brand-hover: #2650c4;
+  --brand-active: #1f3fa0;
+  --brand-tint: #eef2fe;
+  --brand-tint-2: #dce5fc;
+  --brand-ink: #1f3fa0;
+
+  --ink: #10192b;
+  --ink-2: #45516b;
+  --ink-3: #8791a8;
+
+  --line: #e5e9f2;
+  --surface: #ffffff;
+  --bg: #f5f7fb;
+  --bg-2: #eef1f8;
+
+  --success: #1e9e6b;
+  --success-tint: #e3f6ed;
+  --warning: #b5790e;
+  --warning-tint: #fbf0d9;
+  --critical: #d14343;
+  --critical-tint: #fbe4e4;
+
+  --radius-card: 14px;
+  --radius-sm: 10px;
+  --shadow-card: 0 1px 2px rgba(16, 25, 43, 0.04), 0 6px 20px rgba(16, 25, 43, 0.06);
+
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+a {
+  color: var(--brand);
+}
+a:hover {
+  color: var(--brand-hover);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Buttons */
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 11px 20px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  min-height: 44px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--brand-tint-2);
+  outline-offset: 2px;
+}
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(47, 95, 224, 0.25);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-hover);
+}
+.btn-primary:active:not(:disabled) {
+  background: var(--brand-active);
+}
+.btn-primary:disabled {
+  background: var(--bg-2);
+  color: var(--ink-3);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink-2);
+  border-color: var(--line);
+}
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-tint);
+}
+.btn-secondary:disabled {
+  color: var(--ink-3);
+  cursor: not-allowed;
+}
+.btn-danger {
+  background: var(--critical);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(209, 67, 67, 0.25);
+}
+.btn-danger:hover:not(:disabled) {
+  background: #b93636;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: transparent;
+}
+.btn-ghost:hover:not(:disabled) {
+  color: var(--critical);
+  background: var(--critical-tint);
+}
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 13px;
+  min-height: 36px;
+}
+.btn-block {
+  width: 100%;
+}
+
+/* Form fields */
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+legend {
+  padding: 0;
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.required-mark {
+  color: var(--critical);
+  margin-left: 2px;
+}
+.field input[type='text'],
+.field input[type='number'],
+.field select {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+}
+.field input:focus-visible,
+.field select:focus-visible {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-tint-2);
+}
+.field.has-error input,
+.field.has-error select {
+  border-color: var(--critical);
+}
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--critical);
+}
+
+/* Payment wizard step layout */
+.step-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.step-hint {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+/* Status chips (reused from the dashboard mockups) */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.status.success { background: var(--success-tint); color: var(--success); }
+.status.warning { background: var(--warning-tint); color: var(--warning); }
+.status.critical { background: var(--critical-tint); color: var(--critical); }
+.status.neutral { background: var(--bg-2); color: var(--ink-2); }
+.status.info { background: var(--brand-tint); color: var(--brand-ink); }

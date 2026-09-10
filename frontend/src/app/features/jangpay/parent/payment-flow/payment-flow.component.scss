@@ -1,0 +1,106 @@
+.wizard-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 60px;
+}
+
+.wizard-card {
+  width: 100%;
+  max-width: 720px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 32px 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.wizard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.wizard-header h1 {
+  margin-top: 4px;
+  font-size: 22px;
+}
+
+.wizard-form {
+  margin-top: 32px;
+}
+
+.wizard-footer {
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .wizard-page {
+    padding: 0;
+  }
+  .wizard-card {
+    max-width: none;
+    min-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    padding: 24px 18px 20px;
+  }
+  .wizard-header h1 {
+    font-size: 19px;
+  }
+  .wizard-footer {
+    justify-content: stretch;
+  }
+  .footer-nav {
+    flex: 1;
+  }
+  .footer-nav .btn {
+    flex: 1;
+  }
+}

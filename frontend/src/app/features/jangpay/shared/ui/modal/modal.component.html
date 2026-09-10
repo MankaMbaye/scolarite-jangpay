@@ -1,0 +1,22 @@
+<div class="backdrop" (click)="onBackdropClick()">
+  <div
+    #panel
+    class="panel"
+    [class.lg]="size() === 'lg'"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'modal-title'"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="panel-header">
+      <h2 id="modal-title">{{ title() }}</h2>
+      <button type="button" class="close-btn" (click)="close.emit()" aria-label="Fermer">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <div class="panel-body">
+      <ng-content />
+    </div>
+  </div>
+</div>

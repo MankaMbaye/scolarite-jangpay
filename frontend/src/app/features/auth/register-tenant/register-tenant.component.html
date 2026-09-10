@@ -1,38 +1,43 @@
 <div class="auth-page">
   <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="auth-brand">
+      <span class="auth-logo">J</span>
+      <span class="auth-brand-name">JangERP</span>
+    </div>
+
     <h1>Créer votre établissement</h1>
     <p class="subtitle">Démarrez votre espace de gestion scolaire</p>
 
-    <label>
-      Nom de l'établissement
-      <input type="text" formControlName="tenantName" placeholder="Lycée Victor Hugo" />
-    </label>
+    <div class="field">
+      <label for="tenantName">Nom de l'établissement</label>
+      <input id="tenantName" type="text" formControlName="tenantName" placeholder="Lycée Victor Hugo" />
+    </div>
 
-    <label>
-      Code établissement
-      <input type="text" formControlName="tenantCode" placeholder="lycee-victor-hugo" />
-    </label>
+    <div class="field">
+      <label for="tenantCode">Code établissement</label>
+      <input id="tenantCode" type="text" formControlName="tenantCode" placeholder="lycee-victor-hugo" />
+    </div>
 
-    <label>
-      Votre nom complet
-      <input type="text" formControlName="adminFullName" />
-    </label>
+    <div class="field">
+      <label for="adminFullName">Votre nom complet</label>
+      <input id="adminFullName" type="text" formControlName="adminFullName" />
+    </div>
 
-    <label>
-      Email
-      <input type="email" formControlName="adminEmail" />
-    </label>
+    <div class="field">
+      <label for="adminEmail">Email</label>
+      <input id="adminEmail" type="email" formControlName="adminEmail" />
+    </div>
 
-    <label>
-      Mot de passe
-      <input type="password" formControlName="adminPassword" />
-    </label>
+    <div class="field">
+      <label for="adminPassword">Mot de passe</label>
+      <input id="adminPassword" type="password" formControlName="adminPassword" />
+    </div>
 
     @if (errorMessage()) {
-      <p class="error">{{ errorMessage() }}</p>
+      <p class="error" role="alert">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="loading()">
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="loading()">
       {{ loading() ? 'Création...' : 'Créer mon espace' }}
     </button>
 

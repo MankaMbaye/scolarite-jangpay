@@ -1,0 +1,24 @@
+:host {
+  display: inline-flex;
+}
+
+.method-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.method-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 3px;
+  flex: none;
+}
+
+.method-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+}

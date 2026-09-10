@@ -1,0 +1,227 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">JangPay</p>
+      <h1>Transactions</h1>
+      <p class="subtitle">Historique complet des paiements de l'établissement.</p>
+    </div>
+    <button type="button" class="btn btn-ghost" (click)="backToDashboard()">Retour au tableau de bord</button>
+  </header>
+
+  <section class="filters">
+    <div class="search-row">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.2" stroke="currentColor" stroke-width="1.6"/><path d="M15 15l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input
+          type="text"
+          placeholder="Rechercher par ID, élève, parent ou référence…"
+          [value]="tx.search()"
+          (input)="onSearchInput($any($event.target).value)"
+        />
+      </div>
+      @if (tx.activeFilterCount() > 0) {
+        <button type="button" class="reset-link" (click)="tx.resetFilters()">Réinitialiser les filtres ({{ tx.activeFilterCount() }})</button>
+      }
+    </div>
+
+    <div class="filter-grid">
+      <div class="filter-field">
+        <label>Période</label>
+        <div class="date-range">
+          <input type="date" aria-label="Du" [value]="tx.dateFrom()" (input)="tx.setDateFrom($any($event.target).value)" />
+          <span>–</span>
+          <input type="date" aria-label="Au" [value]="tx.dateTo()" (input)="tx.setDateTo($any($event.target).value)" />
+        </div>
+      </div>
+
+      <div class="filter-field">
+        <label for="f-student">Élève</label>
+        <select id="f-student" [value]="tx.studentFilter()" (change)="tx.setStudentFilter($any($event.target).value)">
+          <option value="ALL">Tous les élèves</option>
+          @for (s of tx.students; track s.id) {
+            <option [value]="s.id">{{ s.fullName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="f-parent">Parent</label>
+        <select id="f-parent" [value]="tx.parentFilter()" (change)="tx.setParentFilter($any($event.target).value)">
+          <option value="ALL">Tous les parents</option>
+          @for (p of tx.availableParents(); track p) {
+            <option [value]="p">{{ p }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="f-method">Moyen de paiement</label>
+        <select id="f-method" [value]="tx.methodFilter()" (change)="tx.setMethodFilter($any($event.target).value)">
+          <option value="ALL">Tous les moyens</option>
+          @for (m of methods; track m.id) {
+            <option [value]="m.id">{{ m.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="f-status">Statut</label>
+        <select id="f-status" [value]="tx.statusFilter()" (change)="tx.setStatusFilter($any($event.target).value)">
+          <option value="ALL">Tous les statuts</option>
+          @for (s of statuses; track s[0]) {
+            <option [value]="s[0]">{{ s[1] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="f-category">Type de frais</label>
+        <select id="f-category" [value]="tx.categoryFilter()" (change)="tx.setCategoryFilter($any($event.target).value)">
+          <option value="ALL">Tous les types</option>
+          @for (c of categories; track c[0]) {
+            <option [value]="c[0]">{{ c[1] }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="table-card">
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col style="width: 150px;" />
+          <col style="width: 110px;" />
+          <col style="width: 130px;" />
+          <col style="width: 120px;" />
+          <col style="width: 150px;" />
+          <col style="width: 110px;" />
+          <col style="width: 130px;" />
+          <col style="width: 114px;" />
+          <col style="width: 110px;" />
+          <col style="width: 76px;" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>ID transaction</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('date')">
+                Date
+                @if (sortIndicator('date')) {
+                  <span class="arrow">{{ sortIndicator('date') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('studentName')">
+                Élève
+                @if (sortIndicator('studentName')) {
+                  <span class="arrow">{{ sortIndicator('studentName') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>Parent</th>
+            <th>Type de frais</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('amount')">
+                Montant
+                @if (sortIndicator('amount')) {
+                  <span class="arrow">{{ sortIndicator('amount') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>Moyen</th>
+            <th>Statut</th>
+            <th>Référence</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (t of tx.pagedTransactions(); track t.id) {
+            <tr (click)="viewDetail(t.id)" class="clickable-row">
+              <td class="mono">{{ t.id }}</td>
+              <td class="date-cell">
+                <div>{{ formatDate(t.date) }}</div>
+                <div class="cell-sub">{{ timeOf(t.date) }}</div>
+              </td>
+              <td>
+                <div class="fee-name">{{ t.studentName }}</div>
+                <div class="cell-sub">{{ t.studentClass }}</div>
+              </td>
+              <td>{{ t.parentName }}</td>
+              <td>
+                <div>{{ categoryLabels[t.feeCategory] }}</div>
+                <div class="cell-sub">{{ t.feeLabel }}</div>
+              </td>
+              <td class="num">{{ formatXof(t.amount) }}</td>
+              <td>
+                <app-method-badge [method]="methodOf(t.method)" />
+              </td>
+              <td>
+                <span class="status" [class]="statusTone(t.status)">{{ statusLabels[t.status] }}</span>
+              </td>
+              <td class="mono">{{ t.reference }}</td>
+              <td class="actions-col">
+                <button type="button" class="icon-btn" title="Voir le détail" (click)="$event.stopPropagation(); viewDetail(t.id)">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.3" stroke="currentColor" stroke-width="1.5"/></svg>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="10" class="empty-row">Aucune transaction ne correspond à vos critères.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-list">
+      @for (t of tx.pagedTransactions(); track t.id) {
+        <article class="tx-card-item" (click)="viewDetail(t.id)">
+          <div class="card-top">
+            <span class="mono card-id">{{ t.id }}</span>
+            <span class="status" [class]="statusTone(t.status)">{{ statusLabels[t.status] }}</span>
+          </div>
+
+          <div class="card-student">
+            <div class="fee-name">{{ t.studentName }}</div>
+            <div class="cell-sub">{{ t.studentClass }} · {{ t.parentName }}</div>
+          </div>
+
+          <dl class="card-grid">
+            <div><dt>Frais</dt><dd>{{ t.feeLabel }}</dd></div>
+            <div><dt>Montant</dt><dd class="num">{{ formatXof(t.amount) }}</dd></div>
+            <div>
+              <dt>Moyen</dt>
+              <dd>
+                <app-method-badge [method]="methodOf(t.method)" />
+              </dd>
+            </div>
+            <div><dt>Date</dt><dd>{{ formatDate(t.date) }} · {{ timeOf(t.date) }}</dd></div>
+          </dl>
+
+          <div class="card-footer">
+            <span class="mono cell-sub">Réf. {{ t.reference }}</span>
+            <span class="view-link">Voir le détail ›</span>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty-row">Aucune transaction ne correspond à vos critères.</p>
+      }
+    </div>
+
+    <footer class="pagination">
+      <span class="result-count">{{ tx.resultCount() }} transaction{{ tx.resultCount() > 1 ? 's' : '' }}</span>
+      @if (tx.totalPages() > 1) {
+        <div class="pages">
+          <button type="button" class="page-btn" [disabled]="tx.page() === 1" (click)="tx.goToPage(tx.page() - 1)" aria-label="Page précédente">‹</button>
+          @for (n of pageNumbers(); track n) {
+            <button type="button" class="page-btn" [class.active]="tx.page() === n" (click)="tx.goToPage(n)">{{ n }}</button>
+          }
+          <button type="button" class="page-btn" [disabled]="tx.page() === tx.totalPages()" (click)="tx.goToPage(tx.page() + 1)" aria-label="Page suivante">›</button>
+        </div>
+      }
+    </footer>
+  </section>
+</div>

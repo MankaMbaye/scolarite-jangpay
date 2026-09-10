@@ -1,0 +1,64 @@
+<fieldset>
+  <legend>
+    <h2 class="step-title">Frais à payer</h2>
+    <p class="step-hint">Sélectionnez un ou plusieurs frais pour {{ flow.selectedStudent()?.fullName }}.</p>
+  </legend>
+
+  @if (flow.studentFees().length === 0) {
+    <p class="empty-state">Cet élève n'a aucun frais en cours ou en attente de paiement.</p>
+  }
+
+  <div class="fee-list" role="group" aria-label="Frais disponibles" aria-required="true">
+    @for (fee of flow.studentFees(); track fee.id) {
+      @let remaining = fee.totalAmount - fee.paidAmount;
+      @let settled = fee.status === 'SOLDEE';
+      <label class="fee-card" [class.selected]="flow.selectedFeeIds().has(fee.id)" [class.disabled]="settled">
+        <input
+          type="checkbox"
+          [checked]="flow.selectedFeeIds().has(fee.id)"
+          [disabled]="settled"
+          (change)="toggle(fee)"
+        />
+        <span class="fee-main">
+          <span class="fee-top">
+            <span class="fee-category">{{ categoryLabels[fee.category] }}</span>
+            <span class="status" [class]="statusTone(fee.status)">{{ statusLabels[fee.status] }}</span>
+          </span>
+          <span class="fee-figures">
+            <span><b>Total</b> {{ formatXof(fee.totalAmount) }}</span>
+            <span><b>Payé</b> {{ formatXof(fee.paidAmount) }}</span>
+            <span><b>Restant</b> {{ formatXof(remaining) }}</span>
+            <span><b>Échéance</b> {{ formatDate(fee.dueDate) }}</span>
+          </span>
+        </span>
+      </label>
+    }
+  </div>
+
+  @if (flow.attemptedAdvance() && flow.selectedFeeIds().size === 0 && flow.studentFees().length > 0) {
+    <p class="field-error" role="alert">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 6l4 4M10 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Sélectionnez au moins un frais à payer.
+    </p>
+  }
+
+  @if (flow.isStaff()) {
+    <div class="history-section">
+      <h3 class="history-title">Historique des paiements</h3>
+      @if (flow.selectedStudentHistory().length === 0) {
+        <p class="empty-state">Aucun paiement antérieur enregistré pour cet élève.</p>
+      } @else {
+        <div class="history-list">
+          @for (entry of flow.selectedStudentHistory(); track entry.id) {
+            <div class="history-row">
+              <span class="history-date">{{ formatDateTime(entry.date) }}</span>
+              <span class="history-label">{{ entry.feeLabel }}</span>
+              <span class="history-amount num">{{ formatXof(entry.amount) }}</span>
+              <span class="status" [class]="transactionStatusTone(entry.status)">{{ transactionStatusLabels[entry.status] }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</fieldset>

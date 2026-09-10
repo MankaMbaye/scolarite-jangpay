@@ -18,6 +18,18 @@ server:
   port: 8080
 
 app:
+  cors:
+    # Comma-separated. The deployed frontend origin (e.g. a Vercel URL) is added here via env var,
+    # never hardcoded in source — see SecurityConfig.
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200}
   jwt:
     secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret-change-me}
     expiration-ms: 86400000
+  payments:
+    # 'sandbox' is the only supported mode until real merchant credentials exist for a provider —
+    # every gateway-backed method routes to the mock/sandbox provider. Never set 'live' without also
+    # setting that provider's real API credentials via environment variables (never hard-coded).
+    mode: ${PAYMENTS_MODE:sandbox}
+    sandbox:
+      webhook-secret: ${PAYMENTS_SANDBOX_WEBHOOK_SECRET:dev-only-sandbox-webhook-secret}
+      settle-delay-ms: 2500

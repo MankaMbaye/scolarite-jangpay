@@ -1,0 +1,49 @@
+<fieldset>
+  <legend>
+    <h2 class="step-title">Confirmation</h2>
+    <p class="step-hint">Vérifiez les informations avant de valider le paiement.</p>
+  </legend>
+
+  <dl class="recap">
+    <div class="recap-row">
+      <dt>Élève</dt>
+      <dd>{{ flow.selectedStudent()?.fullName }}</dd>
+    </div>
+    <div class="recap-row">
+      <dt>Classe</dt>
+      <dd>{{ flow.selectedStudent()?.classLevel }}</dd>
+    </div>
+    <div class="recap-row">
+      <dt>Frais</dt>
+      <dd>
+        @for (fee of flow.selectedFees(); track fee.id; let last = $last) {
+          {{ categoryLabels[fee.category] }}{{ last ? '' : ', ' }}
+        }
+      </dd>
+    </div>
+    <div class="recap-row">
+      <dt>Moyen de paiement</dt>
+      <dd>{{ flow.selectedMethod()?.label }}</dd>
+    </div>
+    <div class="recap-row">
+      <dt>Date</dt>
+      <dd>{{ today }}</dd>
+    </div>
+    <div class="recap-row total">
+      <dt>Montant</dt>
+      <dd class="num">{{ formatXof(flow.amountToPay()) }}</dd>
+    </div>
+  </dl>
+
+  <label class="confirm-check" [class.has-error]="flow.attemptedAdvance() && !flow.confirmed()">
+    <input type="checkbox" [checked]="flow.confirmed()" (change)="onConfirmChange($any($event.target).checked)" />
+    <span>Je confirme que les informations sont correctes.</span>
+  </label>
+
+  @if (flow.attemptedAdvance() && !flow.confirmed()) {
+    <p class="field-error" role="alert">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 6l4 4M10 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Confirmez que les informations sont correctes pour continuer.
+    </p>
+  }
+</fieldset>

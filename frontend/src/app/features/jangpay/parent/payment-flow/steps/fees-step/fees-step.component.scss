@@ -1,0 +1,137 @@
+.empty-state {
+  margin: 18px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.fee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.fee-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+}
+.fee-card:hover:not(.disabled) {
+  border-color: var(--brand-tint-2);
+  background: var(--bg-2);
+}
+.fee-card.selected {
+  border-color: var(--brand);
+  background: var(--brand-tint);
+}
+.fee-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.fee-card input[type='checkbox'] {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand);
+  flex: none;
+}
+
+.fee-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fee-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fee-category {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.fee-figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.fee-figures b {
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.history-section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.history-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  font-size: 12.5px;
+}
+
+.history-date {
+  color: var(--ink-3);
+  flex: 0 0 130px;
+}
+
+.history-label {
+  color: var(--ink-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.history-amount {
+  color: var(--ink);
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+  .history-row {
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+  .history-date {
+    flex: 1 1 100%;
+  }
+}

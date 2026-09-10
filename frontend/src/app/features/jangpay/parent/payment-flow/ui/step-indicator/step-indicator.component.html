@@ -1,0 +1,36 @@
+<nav class="stepper" aria-label="Étapes du paiement">
+  <ol class="stepper-desktop">
+    @for (step of steps(); track step.label; let i = $index; let last = $last) {
+      <li
+        class="step"
+        [class.done]="i < currentIndex()"
+        [class.current]="i === currentIndex()"
+        [attr.aria-current]="i === currentIndex() ? 'step' : null"
+      >
+        <span class="marker">
+          @if (i < currentIndex()) {
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            <span class="dot"></span>
+          }
+        </span>
+        <span class="label">{{ step.label }}</span>
+        @if (!last) {
+          <span class="connector" aria-hidden="true"></span>
+        }
+      </li>
+    }
+  </ol>
+
+  <div class="stepper-mobile">
+    <div class="mobile-text">
+      <span class="mobile-step">Étape {{ currentIndex() + 1 }} sur {{ steps().length }}</span>
+      <span class="mobile-label">{{ steps()[currentIndex()].label }}</span>
+    </div>
+    <div class="mobile-bar">
+      <span [style.width.%]="(currentIndex() / (steps().length - 1)) * 100"></span>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,121 @@
+.stepper-mobile {
+  display: none;
+}
+
+.stepper-desktop {
+  display: flex;
+  align-items: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.step:last-child {
+  flex: 0 0 auto;
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  color: var(--ink-3);
+  background: var(--surface);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ink-3);
+}
+
+.step.current .marker {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.step.current .dot {
+  background: var(--brand);
+}
+
+.step.done .marker {
+  border-color: var(--success);
+  background: var(--success);
+  color: #fff;
+}
+
+.label {
+  margin-left: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.step.current .label {
+  color: var(--ink);
+}
+.step.done .label {
+  color: var(--ink-2);
+}
+
+.connector {
+  flex: 1;
+  height: 2px;
+  background: var(--line);
+  margin: 0 14px;
+  min-width: 16px;
+}
+.step.done .connector {
+  background: var(--success);
+}
+
+@media (max-width: 760px) {
+  .stepper-desktop {
+    display: none;
+  }
+  .stepper-mobile {
+    display: block;
+  }
+  .mobile-text {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .mobile-step {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .mobile-label {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .mobile-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--bg-2);
+    overflow: hidden;
+  }
+  .mobile-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--brand);
+    border-radius: 999px;
+    transition: width 0.2s ease;
+  }
+}

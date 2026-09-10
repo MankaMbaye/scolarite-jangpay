@@ -1,46 +1,135 @@
 .dashboard {
   min-height: 100vh;
-  background: #f4f5f7;
+  background: var(--bg);
 }
 
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  padding: 0.85rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
 
   h1 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+    font-family: var(--font-display);
+    color: var(--ink);
   }
 }
 
 .user {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: #444;
-
-  button {
-    padding: 0.4rem 0.8rem;
-    border: 1px solid #d0d3d9;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-  }
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--ink-2);
 }
 
 main {
-  padding: 2rem;
+  padding: 2rem 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
 
-  pre {
-    background: #111827;
-    color: #d1fae5;
-    padding: 1rem;
-    border-radius: 8px;
-    overflow-x: auto;
+  h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--ink);
+  }
+}
+
+.welcome {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 0 0 2rem;
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.api-status {
+  flex-shrink: 0;
+}
+.api-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.jangpay-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.link-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.link-card:hover {
+  border-color: var(--brand);
+  transform: translateY(-1px);
+}
+.link-card:focus-visible {
+  outline: 3px solid var(--brand-tint-2);
+  outline-offset: 2px;
+}
+
+.link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-tint);
+  color: var(--brand-ink);
+}
+
+.link-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.link-title {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.link-desc {
+  color: var(--ink-3);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.75rem 1rem;
+  }
+  main {
+    padding: 1.5rem 1rem;
   }
 }

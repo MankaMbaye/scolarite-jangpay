@@ -1,0 +1,74 @@
+@if (flow.result(); as result) {
+  <section class="result" [class]="result.status.toLowerCase()">
+    <div class="badge">
+      @switch (result.status) {
+        @case ('SUCCESS') {
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 12.3 10.3 15 16.5 8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        }
+        @case ('PENDING') {
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5.5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        }
+        @case ('FAILED') {
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        }
+        @case ('CANCELLED') {
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        }
+      }
+    </div>
+
+    <h2 class="result-title">
+      @switch (result.status) {
+        @case ('SUCCESS') { Paiement effectué avec succès }
+        @case ('PENDING') { Paiement en attente de confirmation }
+        @case ('FAILED') { Le paiement a échoué }
+        @case ('CANCELLED') { Paiement annulé }
+      }
+    </h2>
+    <p class="result-sub">
+      @switch (result.status) {
+        @case ('SUCCESS') { Le reçu a été généré et est disponible ci-dessous. }
+        @case ('PENDING') { La confirmation de {{ result.methodLabel }} peut prendre quelques minutes. Vous recevrez une notification. }
+        @case ('FAILED') { La transaction n'a pas pu être finalisée. Vous pouvez réessayer avec le même moyen de paiement ou un autre. }
+        @case ('CANCELLED') { Le paiement a été interrompu avant sa finalisation. Aucun montant n'a été débité. }
+      }
+    </p>
+
+    <dl class="recap">
+      <div class="recap-row">
+        <dt>Numéro de transaction</dt>
+        <dd class="num">{{ result.transactionRef }}</dd>
+      </div>
+      <div class="recap-row">
+        <dt>Élève</dt>
+        <dd>{{ result.studentName }}</dd>
+      </div>
+      <div class="recap-row">
+        <dt>Montant</dt>
+        <dd class="num">{{ formatXof(result.amount) }}</dd>
+      </div>
+      <div class="recap-row">
+        <dt>Date</dt>
+        <dd>{{ formatDateTime(result.paidAt) }}</dd>
+      </div>
+      <div class="recap-row">
+        <dt>Moyen de paiement</dt>
+        <dd>{{ result.methodLabel }}</dd>
+      </div>
+    </dl>
+
+    <div class="actions">
+      @if (result.status === 'SUCCESS') {
+        <button type="button" class="btn btn-secondary" (click)="viewReceipt()">Voir le reçu</button>
+        <button type="button" class="btn btn-secondary" (click)="viewReceipt()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2.5v8M5 7.3 8 10.5l3-3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13.5h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Télécharger le reçu PDF
+        </button>
+      }
+      @if (result.status === 'FAILED' || result.status === 'CANCELLED') {
+        <button type="button" class="btn btn-secondary" (click)="retry()">Réessayer</button>
+      }
+      <button type="button" class="btn btn-primary" (click)="backToDashboard()">Retour au tableau de bord</button>
+    </div>
+  </section>
+}

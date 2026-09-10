@@ -1,0 +1,7 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 1300, "title": "Vue Parent" },
+    { "file": "Comptable.dc.html", "x": 1540, "y": 0, "w": 1440, "h": 1080, "title": "Vue Comptable" }
+  ],
+  "launch": { "view": "canvas" }
+}

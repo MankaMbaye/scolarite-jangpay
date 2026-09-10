@@ -1,0 +1,61 @@
+<div class="wizard-page">
+  <div class="wizard-card">
+    @if (!isResultStep()) {
+      <header class="wizard-header">
+        <div>
+          <p class="eyebrow">JangPay</p>
+          <h1>Payer les frais scolaires</h1>
+        </div>
+        <button type="button" class="btn btn-ghost" (click)="cancel()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          Annuler
+        </button>
+      </header>
+
+      <app-step-indicator [steps]="stepLabels" [currentIndex]="flow.currentStepIndex()" />
+    }
+
+    <form class="wizard-form" (submit)="$event.preventDefault()">
+      @switch (flow.currentStep()) {
+        @case ('student') {
+          <app-student-step />
+        }
+        @case ('fees') {
+          <app-fees-step />
+        }
+        @case ('amount') {
+          <app-amount-step />
+        }
+        @case ('method') {
+          <app-method-step />
+        }
+        @case ('confirm') {
+          <app-confirm-step />
+        }
+        @case ('result') {
+          <app-result-step />
+        }
+      }
+    </form>
+
+    @if (!isResultStep()) {
+      <footer class="wizard-footer">
+        <div class="footer-nav">
+          @if (!isFirstStep()) {
+            <button type="button" class="btn btn-secondary" (click)="flow.previous()">Précédent</button>
+          }
+          <button type="button" class="btn btn-primary" [disabled]="flow.submitting()" (click)="onPrimaryAction()">
+            @if (flow.submitting()) {
+              <span class="spinner" aria-hidden="true"></span>
+              Traitement…
+            } @else if (isConfirmStep()) {
+              Payer {{ formatXof(flow.amountToPay()) }}
+            } @else {
+              Suivant
+            }
+          </button>
+        </div>
+      </footer>
+    }
+  </div>
+</div>

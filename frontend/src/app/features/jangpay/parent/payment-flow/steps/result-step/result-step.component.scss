@@ -1,0 +1,95 @@
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+.badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--success-tint);
+  color: var(--success);
+}
+.result.pending .badge {
+  background: var(--warning-tint);
+  color: var(--warning);
+}
+.result.failed .badge {
+  background: var(--critical-tint);
+  color: var(--critical);
+}
+.result.cancelled .badge {
+  background: var(--bg-2);
+  color: var(--ink-3);
+}
+
+.result-title {
+  margin-top: 18px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.result-sub {
+  margin: 8px 0 0;
+  max-width: 46ch;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.recap {
+  width: 100%;
+  max-width: 420px;
+  margin: 28px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  text-align: left;
+}
+.recap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.recap-row:last-child {
+  border-bottom: none;
+}
+.recap-row dt {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.recap-row dd {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .actions .btn {
+    width: 100%;
+  }
+}

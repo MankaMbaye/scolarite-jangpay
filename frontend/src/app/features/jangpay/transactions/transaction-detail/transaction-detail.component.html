@@ -1,0 +1,131 @@
+@if (transaction(); as t) {
+  <div class="page">
+    <div class="no-print">
+      <button type="button" class="back-link" (click)="backToList()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3.5 5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Toutes les transactions
+      </button>
+    </div>
+
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">JangPay · Transaction</p>
+        <h1 class="mono">{{ t.id }}</h1>
+      </div>
+      <span class="status lg" [class]="statusTone(t.status)">{{ statusLabels[t.status] }}</span>
+    </header>
+
+    <div class="content-grid">
+      <div class="col-main">
+        <section class="panel">
+          <h2>Informations transaction</h2>
+          <dl class="info-grid">
+            <div><dt>ID transaction</dt><dd class="mono">{{ t.id }}</dd></div>
+            <div><dt>Date</dt><dd>{{ formatDateTime(t.date) }}</dd></div>
+            <div><dt>Référence</dt><dd class="mono">{{ t.reference }}</dd></div>
+            <div><dt>Statut</dt><dd><span class="status" [class]="statusTone(t.status)">{{ statusLabels[t.status] }}</span></dd></div>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2>Informations élève</h2>
+          <dl class="info-grid">
+            <div><dt>Nom</dt><dd>{{ t.studentName }}</dd></div>
+            <div><dt>Classe</dt><dd>{{ t.studentClass }}</dd></div>
+            <div><dt>Matricule</dt><dd class="mono">{{ t.studentMatricule }}</dd></div>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2>Informations parent</h2>
+          <dl class="info-grid">
+            <div><dt>Nom</dt><dd>{{ t.parentName }}</dd></div>
+            <div><dt>Email</dt><dd>{{ t.parentEmail }}</dd></div>
+            <div><dt>Téléphone</dt><dd>{{ t.parentPhone }}</dd></div>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2>Informations paiement</h2>
+          <dl class="info-grid">
+            <div><dt>Type de frais</dt><dd>{{ categoryLabels[t.feeCategory] }}</dd></div>
+            <div><dt>Frais</dt><dd>{{ t.feeLabel }}</dd></div>
+            <div><dt>Montant</dt><dd class="num">{{ formatXof(t.amount) }}</dd></div>
+            <div><dt>Moyen de paiement</dt>
+              <dd>
+                @if (methodOf(); as m) {
+                  <app-method-badge [method]="m" />
+                }
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2>Historique des changements</h2>
+          <ol class="timeline">
+            @for (entry of t.history; track $index) {
+              <li>
+                <span class="dot" [class]="statusTone(entry.status)"></span>
+                <div class="timeline-body">
+                  <div class="timeline-label">{{ entry.label }}</div>
+                  <div class="timeline-time">{{ formatDateTime(entry.timestamp) }}</div>
+                </div>
+              </li>
+            }
+          </ol>
+        </section>
+      </div>
+
+      <div class="col-side no-print">
+        <section class="panel receipt">
+          <h2>Reçu</h2>
+          <dl class="recap">
+            <div class="recap-row"><dt>Numéro de reçu</dt><dd class="mono">{{ t.id }}</dd></div>
+            <div class="recap-row"><dt>Élève</dt><dd>{{ t.studentName }}</dd></div>
+            <div class="recap-row"><dt>Moyen de paiement</dt><dd>{{ methodOf()?.label }}</dd></div>
+            <div class="recap-row"><dt>Date</dt><dd>{{ formatDate(t.date) }}</dd></div>
+            <div class="recap-row total"><dt>Montant</dt><dd class="num">{{ formatXof(t.amount) }}</dd></div>
+          </dl>
+
+          <div class="receipt-actions">
+            @if (receiptEligible()) {
+              <button type="button" class="btn btn-primary btn-block" (click)="viewReceipt()">
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.3" stroke="currentColor" stroke-width="1.5"/></svg>
+                Voir le reçu
+              </button>
+            } @else {
+              <p class="muted">Le reçu est disponible une fois le paiement réussi.</p>
+            }
+            <button type="button" class="btn btn-secondary btn-block" (click)="print()">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 6V2.5h7V6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><rect x="2.5" y="6" width="11" height="5.5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="4.5" y="9.5" width="7" height="4" stroke="currentColor" stroke-width="1.5"/></svg>
+              Imprimer cette page
+            </button>
+          </div>
+        </section>
+
+        <section class="panel refund-panel">
+          <h2>Remboursement</h2>
+          @if (t.status === 'REFUNDED') {
+            <p class="muted">Cette transaction a déjà été remboursée.</p>
+          } @else if (refundEligible()) {
+            <p class="muted">Disponible pour les paiements réussis. Cette action est irréversible côté JangPay.</p>
+            <button type="button" class="btn btn-danger btn-block" (click)="requestRefund()">Rembourser</button>
+          } @else {
+            <p class="muted">Remboursement disponible uniquement pour les paiements au statut « Réussi ».</p>
+          }
+        </section>
+      </div>
+    </div>
+  </div>
+
+  @if (showConfirm()) {
+    <app-confirm-dialog [data]="confirmData" (confirm)="confirmRefund()" (cancel)="cancelRefund()" />
+  }
+} @else {
+  <div class="not-found">
+    <h1>Transaction introuvable</h1>
+    <p>Aucune transaction ne correspond à l'identifiant « {{ transactionId }} ».</p>
+    <button type="button" class="btn btn-primary" (click)="backToList()">Retour aux transactions</button>
+  </div>
+}

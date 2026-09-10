@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { JsonPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -14,7 +14,7 @@ interface PingResponse {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [JsonPipe],
+  imports: [RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

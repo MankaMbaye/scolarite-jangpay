@@ -5,6 +5,8 @@ public enum Role {
     SUPER_ADMIN,
     /** Manages a single establishment (tenant). */
     TENANT_ADMIN,
+    /** Handles day-to-day payment operations: cash confirmation, refunds. */
+    ACCOUNTANT,
     TEACHER,
     STUDENT,
     PARENT

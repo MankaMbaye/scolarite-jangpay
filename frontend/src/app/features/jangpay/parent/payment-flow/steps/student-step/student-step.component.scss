@@ -1,0 +1,108 @@
+.staff-search {
+  display: flex;
+  gap: 14px;
+  margin-top: 18px;
+}
+.staff-search .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-hint {
+  margin: 18px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  .staff-search {
+    flex-direction: column;
+  }
+}
+
+.student-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+.student-card:hover {
+  border-color: var(--brand-tint-2);
+  background: var(--bg-2);
+}
+.student-card:focus-visible {
+  outline: 3px solid var(--brand-tint-2);
+  outline-offset: 2px;
+}
+.student-card.selected {
+  border-color: var(--brand);
+  background: var(--brand-tint);
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--ink-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.student-card.selected .avatar {
+  background: var(--brand);
+  color: #fff;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.meta {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.check {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.check.checked {
+  border-color: var(--brand);
+  background: var(--brand);
+}

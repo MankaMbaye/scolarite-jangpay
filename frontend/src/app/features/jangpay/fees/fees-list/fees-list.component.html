@@ -1,0 +1,189 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">JangPay</p>
+      <h1>Gestion des frais</h1>
+      <p class="subtitle">Créez et administrez les frais scolaires facturés aux familles.</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" (click)="backToDashboard()">Retour au tableau de bord</button>
+      <button type="button" class="btn btn-primary" (click)="openCreate()">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2.5v11M2.5 8h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Ajouter un frais
+      </button>
+    </div>
+  </header>
+
+  <section class="filters">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.2" stroke="currentColor" stroke-width="1.6"/><path d="M15 15l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Rechercher un frais par nom…" [value]="fees.search()" (input)="onSearchInput($any($event.target).value)" />
+    </div>
+
+    <select aria-label="Filtrer par type" [value]="fees.typeFilter()" (change)="fees.setTypeFilter($any($event.target).value)">
+      <option value="ALL">Tous les types</option>
+      @for (cat of categories; track cat[0]) {
+        <option [value]="cat[0]">{{ cat[1] }}</option>
+      }
+    </select>
+
+    <select aria-label="Filtrer par classe" [value]="fees.classFilter()" (change)="fees.setClassFilter($any($event.target).value)">
+      <option value="ALL">Toutes les classes</option>
+      @for (cls of fees.availableClasses(); track cls) {
+        <option [value]="cls">{{ cls }}</option>
+      }
+    </select>
+
+    <select aria-label="Filtrer par année scolaire" [value]="fees.yearFilter()" (change)="fees.setYearFilter($any($event.target).value)">
+      <option value="ALL">Toutes les années</option>
+      @for (year of fees.availableYears(); track year) {
+        <option [value]="year">{{ year }}</option>
+      }
+    </select>
+
+    <select aria-label="Filtrer par statut" [value]="fees.statusFilter()" (change)="fees.setStatusFilter($any($event.target).value)">
+      <option value="ALL">Tous les statuts</option>
+      <option value="ACTIVE">Actif</option>
+      <option value="INACTIVE">Inactif</option>
+    </select>
+  </section>
+
+  <section class="table-card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('name')">
+                Nom
+                @if (sortIndicator('name')) {
+                  <span class="arrow">{{ sortIndicator('name') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>Type</th>
+            <th>Classe</th>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('amount')">
+                Montant
+                @if (sortIndicator('amount')) {
+                  <span class="arrow">{{ sortIndicator('amount') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>
+              <button type="button" class="sort-btn" (click)="onSort('dueDate')">
+                Échéance
+                @if (sortIndicator('dueDate')) {
+                  <span class="arrow">{{ sortIndicator('dueDate') === 'asc' ? '↑' : '↓' }}</span>
+                }
+              </button>
+            </th>
+            <th>Statut</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fee of fees.pagedFees(); track fee.id) {
+            <tr>
+              <td>
+                <div class="fee-name">{{ fee.name }}</div>
+                <div class="fee-sub">{{ fee.mandatory ? 'Obligatoire' : 'Facultatif' }} · {{ fee.academicYear }}</div>
+              </td>
+              <td>{{ categoryLabels[fee.category] }}</td>
+              <td>{{ fee.classLevel }}</td>
+              <td class="num">{{ formatXof(fee.amount) }}</td>
+              <td>{{ formatDate(fee.dueDate) }}</td>
+              <td>
+                <span class="status" [class]="fee.status === 'ACTIVE' ? 'success' : 'neutral'">
+                  {{ fee.status === 'ACTIVE' ? 'Actif' : 'Inactif' }}
+                </span>
+              </td>
+              <td class="actions-col">
+                <div class="row-actions">
+                  <button type="button" class="icon-btn" title="Voir" (click)="openView(fee)">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.3" stroke="currentColor" stroke-width="1.5"/></svg>
+                  </button>
+                  <button type="button" class="icon-btn" title="Modifier" (click)="openEdit(fee)">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12.5 3.5 16 7l-9 9-4 1 1-4 8.5-9.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  </button>
+                  <button type="button" class="icon-btn" [title]="fee.status === 'ACTIVE' ? 'Désactiver' : 'Activer'" (click)="onToggleStatus(fee)">
+                    @if (fee.status === 'ACTIVE') {
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 5.3a6 6 0 1 0 8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    } @else {
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10 9 11.5 12.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    }
+                  </button>
+                  @if (canDelete()) {
+                    <button type="button" class="icon-btn danger" title="Supprimer" (click)="requestDelete(fee)">
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M8 6V4.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V6m-7.5 0 .6 9.5a1 1 0 0 0 1 1h5.8a1 1 0 0 0 1-1L15.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-row">Aucun frais ne correspond à vos critères.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-list">
+      @for (fee of fees.pagedFees(); track fee.id) {
+        <article class="fee-card-item">
+          <div class="card-top">
+            <div>
+              <div class="fee-name">{{ fee.name }}</div>
+              <div class="fee-sub">{{ fee.mandatory ? 'Obligatoire' : 'Facultatif' }} · {{ fee.academicYear }}</div>
+            </div>
+            <span class="status" [class]="fee.status === 'ACTIVE' ? 'success' : 'neutral'">
+              {{ fee.status === 'ACTIVE' ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+          <dl class="card-grid">
+            <div><dt>Type</dt><dd>{{ categoryLabels[fee.category] }}</dd></div>
+            <div><dt>Classe</dt><dd>{{ fee.classLevel }}</dd></div>
+            <div><dt>Montant</dt><dd class="num">{{ formatXof(fee.amount) }}</dd></div>
+            <div><dt>Échéance</dt><dd>{{ formatDate(fee.dueDate) }}</dd></div>
+          </dl>
+          <div class="card-actions">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="openView(fee)">Voir</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="openEdit(fee)">Modifier</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="onToggleStatus(fee)">
+              {{ fee.status === 'ACTIVE' ? 'Désactiver' : 'Activer' }}
+            </button>
+            @if (canDelete()) {
+              <button type="button" class="btn btn-ghost btn-sm delete-action" (click)="requestDelete(fee)">Supprimer</button>
+            }
+          </div>
+        </article>
+      } @empty {
+        <p class="empty-row">Aucun frais ne correspond à vos critères.</p>
+      }
+    </div>
+
+    <footer class="pagination">
+      <span class="result-count">{{ fees.resultCount() }} résultat{{ fees.resultCount() > 1 ? 's' : '' }}</span>
+      @if (fees.totalPages() > 1) {
+        <div class="pages">
+          <button type="button" class="page-btn" [disabled]="fees.page() === 1" (click)="fees.goToPage(fees.page() - 1)" aria-label="Page précédente">‹</button>
+          @for (n of pageNumbers(); track n) {
+            <button type="button" class="page-btn" [class.active]="fees.page() === n" (click)="fees.goToPage(n)">{{ n }}</button>
+          }
+          <button type="button" class="page-btn" [disabled]="fees.page() === fees.totalPages()" (click)="fees.goToPage(fees.page() + 1)" aria-label="Page suivante">›</button>
+        </div>
+      }
+    </footer>
+  </section>
+</div>
+
+@if (formOpen()) {
+  <app-fee-form-modal [mode]="formMode()" [initial]="editingFee()" (save)="onFormSave($event)" (close)="closeForm()" />
+}
+
+@if (confirmData(); as data) {
+  <app-confirm-dialog [data]="data" (confirm)="onConfirm()" (cancel)="onCancelConfirm()" />
+}
