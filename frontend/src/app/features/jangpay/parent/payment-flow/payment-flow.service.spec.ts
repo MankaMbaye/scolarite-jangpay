@@ -72,6 +72,43 @@ describe('PaymentFlowService', () => {
     });
   });
 
+  describe('frais en retard (échéance dépassée)', () => {
+    it('un frais "en retard" peut être sélectionné et payé, comme un frais en attente', () => {
+      flow.selectStudent('std-moussa');
+      const overdue = flow.studentFees().find((f) => f.status === 'EN_RETARD')!;
+      expect(overdue).toBeDefined();
+      expect(overdue.id).toBe('fee-m-3');
+
+      flow.toggleFee(overdue.id);
+      expect(flow.selectedFeeIds().has(overdue.id)).toBeTrue();
+      expect(flow.totalRemaining()).toBe(overdue.totalAmount - overdue.paidAmount);
+      expect(flow.stepValid().fees).toBeTrue();
+    });
+
+    it('paiement complet d’un frais en retard : succès de bout en bout', fakeAsync(() => {
+      flow.selectStudent('std-moussa');
+      const overdue = flow.studentFees().find((f) => f.status === 'EN_RETARD')!;
+
+      flow.next(); // student -> fees
+      flow.toggleFee(overdue.id);
+      flow.next(); // fees -> amount
+      flow.setPaymentType('complete');
+      flow.next(); // amount -> method
+      flow.selectMethod('CASH');
+      flow.next(); // method -> confirm
+      flow.setConfirmed(true);
+
+      const before = tx.filteredSorted().length;
+      flow.submitPayment();
+      tick(1300);
+
+      expect(flow.result()?.status).toBe('SUCCESS');
+      expect(flow.currentStep()).toBe('result');
+      expect(tx.filteredSorted().length).toBe(before + 1);
+      expect(tx.filteredSorted()[0].amount).toBe(overdue.totalAmount - overdue.paidAmount);
+    }));
+  });
+
   describe('montant', () => {
     beforeEach(() => {
       flow.selectStudent('std-aminata');

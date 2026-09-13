@@ -11,4 +11,12 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Tuned for CPU/RAM-constrained free-tier hosts: skip C2 JIT tiers and use the serial collector to
+# cut cold-boot time, and cap heap/metaspace to stay well inside a 512MB container.
+ENTRYPOINT ["java", \
+  "-XX:TieredStopAtLevel=1", \
+  "-XX:+UseSerialGC", \
+  "-Xshare:auto", \
+  "-Xmx384m", \
+  "-XX:MaxMetaspaceSize=128m", \
+  "-jar", "app.jar"]

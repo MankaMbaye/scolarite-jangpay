@@ -1,6 +1,10 @@
 spring:
   application:
     name: scolarite-backend
+  main:
+    # Defers bean creation until first use — cuts cold-boot time meaningfully on CPU-constrained
+    # hosts (e.g. Render's free tier), where the JVM's own startup is already the bottleneck.
+    lazy-initialization: true
   datasource:
     url: jdbc:postgresql://localhost:5432/scolarite
     username: scolarite
